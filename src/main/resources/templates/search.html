@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boogle Search</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 100px auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 48px;
+            color: #356ae6;
+            margin-bottom: 35px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #356ae6;
+        }
+
+        button {
+            padding: 15px 28px;
+            border: none;
+            border-radius: 30px;
+            background: #356ae6;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2454c5;
+        }
+
+        .results {
+            margin-top: 40px;
+        }
+
+        .result-count {
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .result-card {
+            background: white;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .result-card h3 {
+            margin: 0 0 8px;
+            color: #2454c5;
+        }
+
+        .result-card a {
+            color: #16834a;
+            text-decoration: none;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .result-card a:hover {
+            text-decoration: underline;
+        }
+
+        .result-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .no-results {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            color: #777;
+        }
+
+        @media (max-width: 550px) {
+            .container {
+                margin-top: 60px;
+            }
+
+            h1 {
+                font-size: 38px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Boogle</h1>
+
+    <form action="/search" method="get" class="search-box">
+
+        <input
+            type="text"
+            name="query"
+            placeholder="Search anything..."
+            th:value="${query}"
+            required
+        >
+
+        <button type="submit">Search</button>
+
+    </form>
+
+    <div class="results" th:if="${hasSearched}">
+
+        <p class="result-count"
+           th:text="'Search results for: ' + ${query}">
+        </p>
+
+        <div th:if="${!results.isEmpty()}">
+
+            <div class="result-card"
+                 th:each="result : ${results}">
+
+                <h3 th:text="${result.key}"></h3>
+
+                <a th:href="${result.value}"
+                   th:text="${result.value}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="no-results"
+             th:if="${results.isEmpty()}">
+
+            <h3>No results found</h3>
+            <p>Try searching with different keywords.</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
